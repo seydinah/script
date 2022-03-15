@@ -5,14 +5,8 @@
 sudo apt update
 sudo apt install git gdebi wget build-essential
 
-#Installer et configurer git
-git config --global user.name "Your full name"
-git config --global user.email "xyz@ibel.app"
-
-#Recuperer les sources
-cd -
-git clone https://github.com/Ibel-technology/ibel.git -b 14.0 --single-branch --depth 1
-git clone https://github.com/Ibel-technology/ibel_addons.git -b 14.0 --single-branch --depth 1
+#Ajout d'un utilisateur
+adduser --system --shell=/bin/bash --group ibel
 
 #Installer les dépendances
 sudo apt install gdebi
@@ -27,24 +21,24 @@ sudo apt-get install nodejs npm
 sudo npm install -g rtlcss
 
 #Installer Postgresql
-sudo apt install postgresql postgresql-client
+sudo apt install postgresql
 
 #Créer un nouvel utilisateur PostgreSQL 
-sudo -u postgres createuser -s $USER
-createdb $USER
+su - postgres -c "createuser -d -R -S ibel"
 
 #Installer pip3 et les bibliothèques
 sudo apt install python3-pip python3-dev python3-venv libxml2-dev libxslt1-dev libldap2-dev libsasl2-dev libssl-dev libpq-dev libjpeg-dev
 
-#Créer des environnements virtuels Python
-python3 -m venv ibel-env 
+#Création de l'environnement virtuel
+su - ibel -c "python3 -m venv env"
 
 #Activer l'environnement virtuel
-source ibel-env/bin/activate
- 
+su - ibel -c "source env/bin/activate && git clone https://github.com/Ibel-technology/ibel.git -b 14.0 --single-branch --depth 1 && git clone https://github.com/Ibel-technology/ibel_addons.git -b 14.0 --single-branch --depth 1"
+
 #Installer les exigences Ibel dans l'environnement virtuel
-pip3 install setuptools wheel
-pip3 install -r ibel/requirements.txt
+su - ibel -c "source env/bin/activate && pip3 install wheel && pip3 install -r ibel/requirements.txt"
+
+su - ibel -c "mkdir log && touch log/ibel.log"
 
 #Générer un fichier de configuration pour votre instance Ibel, exécutez la commande suivante
 python3 ibel/odoo-bin --config ibel.conf --addons-path ibel/addons,ibel_addons --save --stop-after-init
