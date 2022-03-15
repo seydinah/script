@@ -33,7 +33,8 @@ sudo apt install python3-pip python3-dev python3-venv libxml2-dev libxslt1-dev l
 su - ibel -c "python3 -m venv env"
 
 #Activer l'environnement virtuel
-su - ibel -c "source env/bin/activate && git clone https://github.com/Ibel-technology/ibel.git -b 14.0 --single-branch --depth 1 && git clone https://github.com/Ibel-technology/ibel_addons.git -b 14.0 --single-branch --depth 1"
+su - ibel -c "source env/bin/activate && git clone https://github.com/Ibel-technology/ibel.git -b 14.0 --single-branch --depth 1"
+su - ibel -c "source env/bin/activate && git clone https://github.com/Ibel-technology/ibel_addons.git -b 14.0 --single-branch --depth 1"
 
 #Installer les exigences Ibel dans l'environnement virtuel
 su - ibel -c "source env/bin/activate && pip3 install wheel && pip3 install -r ibel/requirements.txt"
